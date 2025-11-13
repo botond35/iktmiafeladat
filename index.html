@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team - Wordle Enthusiasts</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>Our Team</h1>
+        <p>We are a team of 3 passionate developers working on Wordle-inspired projects. Our goal is to create fun,
+            interactive word games!</p>
+
+        <div class="team">
+            <div class="member">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwRIWegyAYKH6Mrumk8aoIsjfyeVXMXZsHGA&s"
+                    alt="Team Member 1">
+                <h3>Kiss Botond</h3>
+                <p>Lead Developer</p>
+            </div>
+            <div class="member">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfiJscCXgp7_pu--nH7ATMIf5B2tr2uX6QU13-HKCSDpHCQ-S7_5WxfkKLybl7K433-co&usqp=CAU"
+                    alt="Team Member 2">
+                <h3>Horváth Dániel</h3>
+                <p>UI/UX Designer</p>
+            </div>
+            <div class="member">
+                <img src="https://www.formulaonehistory.com/wp-content/uploads/2023/10/Max-Verstappen-F1-2023.webp"
+                    alt="Team Member 3">
+                <h3>Koskocsák Csaba</h3>
+                <p>Game Logic Expert</p>
+            </div>
+        </div>
+
+        <div class="game">
+            <h2>Play Our Wordle Game</h2>
+            <p>Guess the 5-letter word in 6 tries. Green means correct position, yellow means in word but wrong
+                position, gray means not in word.</p>
+            <div id="grid" class="grid"></div>
+            <input type="text" id="guess" maxlength="5" placeholder="Enter 5-letter word">
+            <button onclick="submitGuess()">Submit Guess</button>
+            <p id="message"></p>
+        </div>
+    </div>
+
+    <script>
+        const words = ['apple', 'grape', 'lemon', 'peach', 'berry', 'mango', 'plums', 'kiwis', 'dates', 'melon'];
+        let targetWord = words[Math.floor(Math.random() * words.length)];
+        let attempts = 0;
+        const maxAttempts = 6;
+        let grid = document.getElementById('grid');
+        let message = document.getElementById('message');
+
+        for (let i = 0; i < maxAttempts * 5; i++) {
+            let cell = document.createElement('div');
+            cell.className = 'cell';
+            grid.appendChild(cell);
+        }
+
+        function submitGuess() {
+            let guess = document.getElementById('guess').value.toLowerCase();
+            if (guess.length !== 5) {
+                message.textContent = 'Please enter a 5-letter word.';
+                return;
+            }
+            if (attempts >= maxAttempts) return;
+
+            let row = attempts;
+            let cells = grid.children;
+            for (let i = 0; i < 5; i++) {
+                cells[row * 5 + i].textContent = guess[i].toUpperCase();
+                if (guess[i] === targetWord[i]) {
+                    cells[row * 5 + i].classList.add('correct');
+                } else if (targetWord.includes(guess[i])) {
+                    cells[row * 5 + i].classList.add('present');
+                } else {
+                    cells[row * 5 + i].classList.add('absent');
+                }
+            }
+
+            attempts++;
+            if (guess === targetWord) {
+                message.textContent = '🎉 Congratulations! You guessed it!';
+            } else if (attempts === maxAttempts) {
+                message.textContent = `😞 Game over! The word was ${targetWord.toUpperCase()}.`;
+            } else {
+                message.textContent = `Attempt ${attempts} of ${maxAttempts}.`;
+            }
+            document.getElementById('guess').value = '';
+        }
+    </script>
+</body>
+
+</html>
